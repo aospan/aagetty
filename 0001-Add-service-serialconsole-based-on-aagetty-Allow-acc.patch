@@ -1,0 +1,32 @@
+From de15fb75579746ed7a203e8b3be4b85add5379a0 Mon Sep 17 00:00:00 2001
+From: Abylay Ospan <aospan@netup.ru>
+Date: Tue, 12 May 2015 23:08:52 -0400
+Subject: [PATCH] Add service serialconsole based on aagetty; Allow access to
+ Android over COM port
+
+---
+ init.x86.rc | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/init.x86.rc b/init.x86.rc
+index 9001841..20cd87e 100644
+--- a/init.x86.rc
++++ b/init.x86.rc
+@@ -159,6 +159,14 @@ service tablet-mode /system/bin/tablet-mode
+     disabled
+     oneshot
+ 
++service serialconsole /sbin/aagetty -d /dev/ttyS0 -b /sbin/shs
++    class main
++    user root
++    group log system
++
++on property:ro.debuggable=1
++    start serialconsole
++
+ on property:init.svc.wpa_supplicant=stopped
+     stop dhcpcd
+ 
+-- 
+2.1.4
+
