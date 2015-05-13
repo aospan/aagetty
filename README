@@ -1,0 +1,34 @@
+ttyS console for android. Tested on android-x86_64 (lollipop)
+
+Compile:
+    mmm external/aagetty
+
+Result will be placed into 'out/target/product/x86_64/root/sbin/aagetty'.
+
+
+
+Following lines will be added to /init.android_x86_64.rc for auto-start service on bootup:
+    service serialconsole /sbin/aagetty -d /dev/ttyS0 -b /sbin/shs
+        class main
+        user root
+        group log system
+
+    on property:ro.debuggable=1
+        start serialconsole
+
+
+Or you can start it manually:
+    adb -s 192.168.1.83:5555 push out/target/product/x86_64/root/sbin/aagetty /system/bin/
+    adb -s 192.168.1.83:5555 shell
+
+and then:
+    /system/bin/aagetty -d /dev/ttyS0 -b /system/bin/sh
+
+
+
+now you can connect to android system using COM port (crossover cable). You will see shell prompt 'root@x86_64:/ #'
+
+
+--
+Abylay Ospan
+aospan@netup.ru
