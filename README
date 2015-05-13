@@ -4,30 +4,21 @@ Compile:
     mmm external/aagetty
 
 Result will be placed into 'out/target/product/x86_64/root/sbin/aagetty'.
-
-
-
-Following lines will be added to /init.android_x86_64.rc for auto-start service on bootup:
-    service serialconsole /sbin/aagetty -d /dev/ttyS0 -b /sbin/shs
-        class main
-        user root
-        group log system
-
-    on property:ro.debuggable=1
-        start serialconsole
-
-
-Or you can start it manually:
+Manual startup:
     adb -s 192.168.1.83:5555 push out/target/product/x86_64/root/sbin/aagetty /system/bin/
     adb -s 192.168.1.83:5555 shell
 
 and then:
     /system/bin/aagetty -d /dev/ttyS0 -b /system/bin/sh
 
-
-
 now you can connect to android system using COM port (crossover cable). You will see shell prompt 'root@x86_64:/ #'
 
+
+For auto start service on bootup apply following patches:
+0001-Add-service-serialconsole-based-on-aagetty-Allow-acc.patch
+0001-Build-static-sh-shs-for-initramfs-image.patch
+
+and rebuild android-x86 tree.
 
 --
 Abylay Ospan
